@@ -65,6 +65,25 @@ def thk():
     g1=tk.Label(lwindow,text="Your feedback:").grid()
     g2=tk.Entry(lwindow,textvariable=g).grid()
     ex=tk.Button(lwindow, text="SUBMIT",command=sql).grid()
+def send_email(to_email, subject, body):
+    gmail_user = '####'
+    gmail_password = '####'
+
+    msg = MIMEMultipart()
+    msg['From'] = gmail_user
+    msg['To'] = to_email
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body, 'plain'))
+
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(gmail_user, gmail_password)
+        server.sendmail(gmail_user, to_email, msg.as_string())
+        server.close()
+        print('Email sent successfully!')
+    except Exception as e:
+        print(f'Error: {e}')
 def sql():
     con=ms.connect(host="localhost",user="root",password="123",database="project")
     mycur=con.cursor()
@@ -77,5 +96,7 @@ def sql():
     mycur.execute(query)
     con.commit()
     con.close()
+    y=yvar.get()
+    send_email(to_email=y.get(), subject="Booking Confirmation", body="Thank you for booking!")
     exit
 win()
