@@ -50,6 +50,7 @@ def em():
     q=tk.Label(swindow, text=d1[s]*p*d2[k]).grid()
     x=tk.Label(swindow, text="Enter your email:").grid()
     y=tk.Entry(swindow, textvariable=yvar).grid()
+    global y
     t=tk.Button(swindow, text="Book package",command=thk).grid()
     des=tk.Button(swindow,text="QUIT",command=exit).grid()
 def thk():
@@ -70,7 +71,7 @@ def send_email(to_email, subject, body):
     gmail_password = '####'
 
     msg = MIMEMultipart()
-    msg['From'] = gmail_user
+    msg['From'] = y
     msg['To'] = to_email
     msg['Subject'] = subject
     msg.attach(MIMEText(body, 'plain'))
@@ -96,7 +97,6 @@ def sql():
     mycur.execute(query)
     con.commit()
     con.close()
-    y=yvar.get()
     send_email(to_email=y.get(), subject="Booking Confirmation", body="Thank you for booking!")
     exit
 win()
